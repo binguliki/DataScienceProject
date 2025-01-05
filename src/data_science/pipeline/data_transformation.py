@@ -19,6 +19,6 @@ class DataTransformationTrainingPipeline:
             data_transformation_config = config.get_data_transformation_config()
             data_transformation = DataTransformation(data_transformation_config)
 
-            data_transformation.train_test_splitting()
+            data_transformation.transformation()
         except Exception as e:
             print(e)
