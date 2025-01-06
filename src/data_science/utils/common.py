@@ -8,6 +8,9 @@ from box import ConfigBox
 from pathlib import Path
 from typing import Any
 from box.exceptions import BoxValueError
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 @ensure_annotations # Use to ensure type annotations when using a function
 def read_yaml(path_to_yaml : Path) -> ConfigBox:
@@ -96,3 +99,44 @@ def load_bin(path: Path) -> Any:
     data = joblib.load(path)
     logger.info(f"Json file loaded from : {path}")
     return data
+
+@ensure_annotations
+def heat_map(data: list|np.ndarray , row_labels:list = [], col_labels:list = [], ax=None, 
+            cbar_kw: dict=None, cbarlabel: str="", **kwargs):
+    if ax is None:
+        ax = plt.gca() # Creates axes if there is no plot
+
+    if cbar_kw is None:
+        cbar_kw = {} # if no keyword arguments are given for color-bar then convert it into empty dictionary
+
+    # Plot the heatmap
+    img = ax.matshow(data, **kwargs)
+
+    # Create colorbar
+    cbar = ax.figure.colorbar(img, ax=ax, **cbar_kw)
+    cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
+    
+    # Set the ticks and their labels
+    ax.set_xticks(range(len(row_labels)), labels= row_labels, rotation=30)
+    ax.set_yticks(range(len(col_labels)), labels= col_labels)
+
+    return img, cbar
+
+def annotate_heatmap(im, data : list = None, valfmt : str="{x:.2f}", **textkw):
+    if not isinstance(data, (list , np.ndarray)):
+        data = im.get_array()
+    # Default text parameters which can be overwritten
+    kw = dict(
+        horizontalalignment = "center",
+        verticalalignment = "center"
+    )
+    kw.update(**textkw)
+    
+    # Set the formatter
+    valfmt = matplotlib.ticker.StrMethodFormatter(valfmt)
+    
+    # Write over the canvas at center of each axes
+    n, m = data.shape
+    for i in range(n):
+        for j in range(m):
+            im.axes.text(j, i, valfmt(data[i, j] , None), **kw)
