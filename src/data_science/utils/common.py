@@ -122,6 +122,7 @@ def heat_map(data: list|np.ndarray , row_labels:list = [], col_labels:list = [],
 
     return img, cbar
 
+@ensure_annotations
 def annotate_heatmap(im, data : list = None, valfmt : str="{x:.2f}", **textkw):
     if not isinstance(data, (list , np.ndarray)):
         data = im.get_array()

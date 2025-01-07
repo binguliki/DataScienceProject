@@ -16,8 +16,8 @@ class DataTransformation:
     
     def train_test_splitting(self, data):
         train, test = train_test_split(data, test_size=0.2)
-        np.save(os.path.join(self.config.root_dir, 'train.npy'), train)
-        np.save(os.path.join(self.config.root_dir, 'test.npy'), test)
+        train.to_csv(os.path.join(self.config.root_dir, 'train.csv'), index=False)
+        test.to_csv(os.path.join(self.config.root_dir, 'test.csv'), index=False)
 
         logger.info("Splitted data into train and test sets")
         logger.info(f"Train data shape -> {train.shape}")
@@ -47,12 +47,14 @@ class DataTransformation:
         ])
 
         pipeline = ColumnTransformer([
-            ('column-pipeline' , categorical_pipe , categorical_columns),
+            ('categorical-pipeline' , categorical_pipe , categorical_columns),
             ('numerical-pipeline' , numerical_pipe , numerical_columns)
-        ])
+        ], remainder="passthrough")
 
         processed_data = pipeline.fit_transform(data)
-        self.train_test_splitting(processed_data)
+        new_categorical_columns = list(pipeline['categorical-pipeline'].get_feature_names_out()) 
+        new_dataframe = pd.DataFrame(processed_data, columns=new_categorical_columns + numerical_columns + ['Trip_Price'])
+        self.train_test_splitting(new_dataframe)
 
         with open(os.path.join(self.config.root_dir, 'pipeline.pkl'), 'wb') as file:
             pickle.dump(pipeline, file)
