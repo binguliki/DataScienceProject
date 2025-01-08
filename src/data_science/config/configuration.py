@@ -1,6 +1,6 @@
 from src.data_science.constants import *
 from src.data_science.utils.common import read_yaml, create_directories
-from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig)
+from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig)
 class ConfigurationManager:
     def __init__(self,
                 config_path = CONFIG_FILE_PATH,
@@ -33,3 +33,17 @@ class ConfigurationManager:
 
         data_validation_config = DataTransformationConfig(**config)
         return data_validation_config
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+        params = self.params.RandomForest
+        target_column = self.schema.TARGET.name
+
+        create_directories([config.root_dir])
+        model_trainer_config = ModelTrainerConfig(
+            **config,
+            target_column=target_column,
+            params = params
+        )
+
+        return model_trainer_config

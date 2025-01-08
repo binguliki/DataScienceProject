@@ -34,6 +34,24 @@ def read_yaml(path_to_yaml : Path) -> ConfigBox:
             raise e
 
 @ensure_annotations
+def write_yaml(data: dict, path: Path):
+    '''
+        Writes into yaml file
+        Args:
+            data(dict) : data to be saved
+            path(Path) : path of the file where it has to be saved.
+    '''
+    try:   
+        if not (path.as_posix().endswith('yaml') or path.as_posix().endswith('.yml')):
+            raise(f"Invalid file format !! Got: {path} Expected .yaml or .yml")
+        
+        with open(path , 'w') as file:
+            yaml.safe_dump(data, file , indent=4, default_flow_style=False)
+        logger.info(f"Dumped data into {path} successfully !!")
+    except Exception as e:
+        raise(e)
+
+@ensure_annotations
 def create_directories(path_to_directories : list, verbose = True):
     '''
         Creates directories
