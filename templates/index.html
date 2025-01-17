@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/home.css">
+    <title>Student form</title>
+</head>
+<body>
+    <form action="{{url_for('predict')}}" target="#" method="POST">
+        <h3>Trip Details</h3>
+
+        <div>
+            <label for="distance">Trip Distance (km):</label>
+            <input type="number" name="distance" step="0.1" required>
+        </div>
+        
+        <div>
+            <label for="time">Time of Day:</label>
+            <select name="time" required>
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="day">Day Type:</label>
+            <select name="day" required>
+                <option value="Weekday">Weekday</option>
+                <option value="Weekend">Weekend</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="passengers">Passenger Count:</label>
+            <input type="number" name="passengers" min="1" required>
+        </div>
+        
+        <div>
+            <label for="traffic">Traffic Conditions:</label>
+            <select name="traffic" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="weather">Weather Conditions:</label>
+            <select name="weather" required>
+                <option value="Clear">Clear</option>
+                <option value="Rain">Rain</option>
+                <option value="Snow">Snow</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="basefare">Base Fare:</label>
+            <input type="number" name="basefare" step="0.1" required>
+        </div>
+        
+        <div>
+            <label for="ratekm">Per Km Rate:</label>
+            <input type="number" name="ratekm" step="0.1" required>
+        </div>
+        
+        <div>
+            <label for="ratemin">Per Minute Rate:</label>
+            <input type="number" name="ratemin" step="0.1" required>
+        </div>
+        
+        <div>
+            <label for="duration">Trip Duration (Minutes):</label>
+            <input type="number" name="duration" step="0.1" required>
+        </div>        
+        <button type="submit">Submit</button>   
+    </form>
+    {% if predicted_fare %}
+    <div class="prediction-result">
+        <h3>Predicted Fare</h3>
+        <p>${{ predicted_fare[0] }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>
