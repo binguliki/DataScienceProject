@@ -3,3 +3,4 @@ artifacts/
 logs/
 __pycache__/
 .env
+research/
