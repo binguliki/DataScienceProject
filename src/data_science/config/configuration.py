@@ -1,6 +1,6 @@
 from src.data_science.constants import *
 from src.data_science.utils.common import read_yaml, create_directories
-from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig)
+from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig, PredictionConfig)
 class ConfigurationManager:
     def __init__(self,
                 config_path = CONFIG_FILE_PATH,
@@ -59,3 +59,15 @@ class ConfigurationManager:
         )
 
         return model_evaluation_config
+    
+    def get_prediction_config(self) -> PredictionConfig:
+        config = self.config.prediction
+        columns = self.schema.COLUMNS
+
+        columns.pop(self.schema.TARGET.name)
+        prediction_config = PredictionConfig(
+            list(columns.keys()),
+            **config
+        )
+
+        return prediction_config

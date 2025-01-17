@@ -39,3 +39,9 @@ class ModelEvaluationConfig:
     model_path: Path
     metric_file_name: Path
     best_params_path: ConfigBox
+
+@dataclass
+class PredictionConfig:
+    columns: list
+    preprocess_pipeline_path: Path
+    model_path: Path

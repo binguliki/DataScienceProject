@@ -36,6 +36,9 @@ class DataTransformation:
         categorical_columns.append('Passenger_Count')
 
         data.dropna(subset=['Trip_Price'], inplace=True) # Remove rows with null output
+        target = data['Trip_Price']
+        data.drop(columns=['Trip_Price'], inplace=True)
+
         categorical_pipe = Pipeline([
             ('imputer' , SimpleImputer(strategy='most_frequent')),
             ('encoder' , OneHotEncoder(sparse_output=False))
@@ -49,11 +52,11 @@ class DataTransformation:
         pipeline = ColumnTransformer([
             ('categorical-pipeline' , categorical_pipe , categorical_columns),
             ('numerical-pipeline' , numerical_pipe , numerical_columns)
-        ], remainder="passthrough")
+        ])
 
         processed_data = pipeline.fit_transform(data)
         new_categorical_columns = list(pipeline['categorical-pipeline'].get_feature_names_out()) 
-        new_dataframe = pd.DataFrame(processed_data, columns=new_categorical_columns + numerical_columns + ['Trip_Price'])
+        new_dataframe = pd.DataFrame(np.c_[processed_data, target], columns=new_categorical_columns + numerical_columns + ['Trip_Price'])
         self.train_test_splitting(new_dataframe)
 
         with open(os.path.join(self.config.root_dir, 'pipeline.pkl'), 'wb') as file:
