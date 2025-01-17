@@ -105,7 +105,6 @@ def save_bin(path: Path, data: Any):
     joblib.dump(data, path)
     logger.info(f"Binary file saved at : {path}")
 
-@ensure_annotations
 def load_bin(path: Path) -> Any:
     '''
         Loads data from binary format
@@ -115,7 +114,7 @@ def load_bin(path: Path) -> Any:
             Any : Object stored in the binary file
     '''
     data = joblib.load(path)
-    logger.info(f"Json file loaded from : {path}")
+    logger.info(f"Binary file loaded from : {path}")
     return data
 
 @ensure_annotations
@@ -154,7 +153,6 @@ def annotate_heatmap(im, data : list = None, valfmt : str="{x:.2f}", **textkw):
     # Set the formatter
     valfmt = matplotlib.ticker.StrMethodFormatter(valfmt)
     
-    # Write over the canvas at center of each axes
     n, m = data.shape
     for i in range(n):
         for j in range(m):

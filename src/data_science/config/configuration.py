@@ -1,6 +1,6 @@
 from src.data_science.constants import *
 from src.data_science.utils.common import read_yaml, create_directories
-from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig)
+from src.data_science.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig)
 class ConfigurationManager:
     def __init__(self,
                 config_path = CONFIG_FILE_PATH,
@@ -47,3 +47,15 @@ class ConfigurationManager:
         )
 
         return model_trainer_config
+    
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        target_column = self.schema.TARGET.name
+
+        create_directories([config.root_dir])
+        model_evaluation_config = ModelEvaluationConfig(
+            target_column,
+            **config
+        )
+
+        return model_evaluation_config

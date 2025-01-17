@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from box import ConfigBox
 
 @dataclass
 class DataIngestionConfig:
@@ -28,3 +29,13 @@ class ModelTrainerConfig:
     model_name: str
     target_column: str
     params: dict
+    best_params_path: Path
+    
+@dataclass
+class ModelEvaluationConfig:
+    target_column: str
+    root_dir: Path
+    test_data_path: Path
+    model_path: Path
+    metric_file_name: Path
+    best_params_path: ConfigBox
