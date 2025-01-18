@@ -4,7 +4,7 @@ from src.data_science.entity.config_entity import ModelEvaluationConfig
 from src.data_science.utils.common import load_bin, save_json
 from sklearn.metrics import mean_squared_error
 import pandas as pd
-
+import mlflow
 class ModelEvaluater:
     def __init__(self, config = ModelEvaluationConfig):
         self.config = config
@@ -22,4 +22,6 @@ class ModelEvaluater:
             "Testing error" : error
         }
         save_json(Path(self.config.metric_file_name), metrics)
+
+        mlflow.log_metric("Testing error ", error)
         logger.info(f"Model error on test data : {error}")

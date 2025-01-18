@@ -4,7 +4,13 @@ from src.data_science.pipeline.data_transformation import DataTransformationTrai
 from src.data_science.pipeline.model_trainer import ModelTrainerPipeline
 from src.data_science.pipeline.model_evaluation import ModelEvaluaterPipeline
 from src.data_science import logger
+from dotenv import load_dotenv
+import mlflow
+import os
 
+load_dotenv()
+mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
+mlflow.set_experiment('Taxi_Fare_Prediction')
 STAGE_NAME = 'Data Ingestion Stage'
 try:
     logger.info(f">>>>>>>>>> Stage {STAGE_NAME} started <<<<<<<<<")
